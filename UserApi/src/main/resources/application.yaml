@@ -1,3 +1,5 @@
 spring:
   application:
     name: UserApi
+server:
+    port: 9000
