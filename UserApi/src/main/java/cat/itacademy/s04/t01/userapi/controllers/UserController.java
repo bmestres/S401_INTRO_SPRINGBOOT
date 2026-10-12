@@ -1,13 +1,14 @@
 package cat.itacademy.s04.t01.userapi.controllers;
 
+import cat.itacademy.s04.t01.userapi.exceptions.ResourceNotFoundException;
 import cat.itacademy.s04.t01.userapi.model.User;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -30,5 +31,18 @@ public class UserController {
         );
         this.userList.add(newUser);
         return newUser;
+    }
+
+    @GetMapping("/users/{id}")
+    @ResponseBody
+    public User getUserById(@PathVariable UUID id){
+        Optional <User> foundUser = this.userList
+                .stream()
+                .filter(user-> user.id().equals(id))
+                .findFirst();
+        if(foundUser.isEmpty()) {
+            throw new ResourceNotFoundException("NotFound(404)");
+        }
+        return foundUser.get();
     }
 }
