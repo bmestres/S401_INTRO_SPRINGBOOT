@@ -15,8 +15,17 @@ public class UserController {
     List<User>userList = new ArrayList<>();
 
     @GetMapping("/users")
-    public List<User> getAll() {
-        return List.copyOf(this.userList);
+    public List<User> getAUsers(@RequestParam(required = false) String name) {
+
+        if(name == null || name.trim().isBlank()) {
+            return List.copyOf(this.userList);
+        }
+        return this.userList
+                .stream()
+                .filter(user-> user.name().equalsIgnoreCase(name))
+                .findFirst()
+                .stream()
+                .toList();
     }
 
     @PostMapping("/users")
@@ -33,8 +42,8 @@ public class UserController {
 
     @GetMapping("/users/{id}")
     @ResponseBody
-    public User getUserById(@PathVariable UUID id){
-        Optional <User> foundUser = this.userList
+    public User getUserById(@PathVariable UUID id) {
+        Optional<User>foundUser = this.userList
                 .stream()
                 .filter(user-> user.id().equals(id))
                 .findFirst();
@@ -43,4 +52,21 @@ public class UserController {
         }
         return foundUser.get();
     }
+
+/*    @GetMapping("/users?name")
+    public User getUserByName(@RequestParam String name) {
+
+        if(name.trim().isBlank()) {
+            getAll();
+        }
+
+        Optional<User>foundUser = this.userList
+                .stream()
+                .filter(user-> user.name().equalsIgnoreCase(name))
+                .findFirst();
+        if(foundUser.isEmpty()) {
+            throw new ResourceNotFoundException("NotFound(404)");
+        }
+        return foundUser.get();
+    }*/
 }
