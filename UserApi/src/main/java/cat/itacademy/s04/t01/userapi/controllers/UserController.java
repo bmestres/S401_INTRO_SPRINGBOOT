@@ -52,21 +52,4 @@ public class UserController {
         }
         return foundUser.get();
     }
-
-/*    @GetMapping("/users?name")
-    public User getUserByName(@RequestParam String name) {
-
-        if(name.trim().isBlank()) {
-            getAll();
-        }
-
-        Optional<User>foundUser = this.userList
-                .stream()
-                .filter(user-> user.name().equalsIgnoreCase(name))
-                .findFirst();
-        if(foundUser.isEmpty()) {
-            throw new ResourceNotFoundException("NotFound(404)");
-        }
-        return foundUser.get();
-    }*/
 }
