@@ -9,6 +9,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import tools.jackson.databind.ObjectMapper;
 
+import java.util.UUID;
+import java.util.regex.Matcher;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -67,7 +70,20 @@ class UserControllerTest {
     }
 
     @Test
-    void getUserById_shouldReturnNotFoundIfMissing() {
+    void getUserById_shouldReturnNotFoundIfMissing() throws Exception {
+
+        User user3 = new User(null, "User2", "user1Email@email.com");
+        String jsonUser3 = objectMapper.writeValueAsString(user3);
+
+        mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonUser3))
+                .andExpect(status().isOk());
+
+        UUID randomId = UUID.randomUUID();
+
+        mockMvc.perform(get("/users/{id}", randomId))
+                .andExpect(status().isNotFound());
     }
 
     @Test
