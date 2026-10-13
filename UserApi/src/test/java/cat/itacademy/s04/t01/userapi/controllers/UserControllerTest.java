@@ -49,7 +49,7 @@ class UserControllerTest {
     @Test
     void getUserById_shouldReturnExpectedUser() throws Exception {
 
-        User user2 = new User(null, "User2", "user1Email@email.com");
+        User user2 = new User(null, "User2", "user2Email@email.com");
         String jsonUser2 = objectMapper.writeValueAsString(user2);
 
         String createdUserResponse = mockMvc.perform(post("/users")
@@ -66,13 +66,13 @@ class UserControllerTest {
         mockMvc.perform(get("/users/{id}", createdUser.id()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value(Matchers.equalTo("User2")))
-                .andExpect(jsonPath("$.email").value(Matchers.equalTo("user1Email@email.com")));
+                .andExpect(jsonPath("$.email").value(Matchers.equalTo("user2Email@email.com")));
     }
 
     @Test
     void getUserById_shouldReturnNotFoundIfMissing() throws Exception {
 
-        User user3 = new User(null, "User2", "user1Email@email.com");
+        User user3 = new User(null, "User3", "user3Email@email.com");
         String jsonUser3 = objectMapper.writeValueAsString(user3);
 
         mockMvc.perform(post("/users")
@@ -87,6 +87,19 @@ class UserControllerTest {
     }
 
     @Test
-    void getAUsers_withNameParameterShouldReturnFilteredUsers() {
+    void getAUsers_withNameParameterShouldReturnFilteredUsers() throws Exception {
+
+        User user4 = new User(null, "User4", "user4Email@email.com");
+        String jsonUser4 = objectMapper.writeValueAsString(user4);
+
+        mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonUser4))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/users").param("name", "User4"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].name").value(Matchers.equalTo("User4")))
+                .andExpect(jsonPath("$[0].email").value(Matchers.equalTo("user4Email@email.com")));
     }
 }
