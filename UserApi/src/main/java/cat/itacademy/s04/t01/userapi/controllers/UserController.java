@@ -14,6 +14,10 @@ public class UserController {
 
     private final List<User>userList = new ArrayList<>();
 
+    protected void clearUserList() {
+        this.userList.clear();
+    }
+
     @GetMapping("/users")
     public List<User> getAUsers(@RequestParam(required = false) String name) {
 
@@ -22,7 +26,7 @@ public class UserController {
         }
         return this.userList
                 .stream()
-                .filter(user-> user.name().equalsIgnoreCase(name))
+                .filter(user-> user.getName().equalsIgnoreCase(name))
                 .findFirst()
                 .stream()
                 .toList();
@@ -32,9 +36,8 @@ public class UserController {
     public User addUser(@RequestBody User user) {
 
         User newUser = new User(
-                UUID.randomUUID(),
-                user.name(),
-                user.email()
+                user.getName(),
+                user.getEmail()
         );
         this.userList.add(newUser);
         return newUser;
@@ -45,7 +48,7 @@ public class UserController {
     public User getUserById(@PathVariable UUID id) {
         Optional<User>foundUser = this.userList
                 .stream()
-                .filter(user-> user.id().equals(id))
+                .filter(user-> user.getId().equals(id))
                 .findFirst();
         if(foundUser.isEmpty()) {
             throw new ResourceNotFoundException("NotFound(404)");

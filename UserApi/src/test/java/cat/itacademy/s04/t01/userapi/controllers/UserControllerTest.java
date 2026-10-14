@@ -2,6 +2,7 @@ package cat.itacademy.s04.t01.userapi.controllers;
 
 import cat.itacademy.s04.t01.userapi.model.User;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,6 +28,15 @@ class UserControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private UserController userController;
+
+
+    @BeforeEach
+    void clearUserList() {
+        userController.clearUserList();
+    }
+
     @Test
     void getAUsers_shouldReturnEmptyListInitially() throws Exception {
         mockMvc
@@ -38,7 +48,7 @@ class UserControllerTest {
     @Test
     void addUser_shouldReturnUserWithId() throws Exception {
 
-        User user1 = new User(null, "User1", "user1Email@email.com");
+        User user1 = new User("User1", "user1Email@email.com");
         String jsonUser1 = objectMapper.writeValueAsString(user1);
 
         mockMvc.perform(post("/users")
@@ -51,7 +61,7 @@ class UserControllerTest {
     @Test
     void getUserById_shouldReturnExpectedUser() throws Exception {
 
-        User user2 = new User(null, "User2", "user2Email@email.com");
+        User user2 = new User("User2", "user2Email@email.com");
         String jsonUser2 = objectMapper.writeValueAsString(user2);
 
         String createdUserResponse = mockMvc.perform(post("/users")
@@ -65,7 +75,7 @@ class UserControllerTest {
         User createdUser = objectMapper.readValue(createdUserResponse, User.class);
 
 
-        mockMvc.perform(get("/users/{id}", createdUser.id()))
+        mockMvc.perform(get("/users/{id}", createdUser.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value(Matchers.equalTo("User2")))
                 .andExpect(jsonPath("$.email").value(Matchers.equalTo("user2Email@email.com")));
@@ -74,7 +84,7 @@ class UserControllerTest {
     @Test
     void getUserById_shouldReturnNotFoundIfMissing() throws Exception {
 
-        User user3 = new User(null, "User3", "user3Email@email.com");
+        User user3 = new User("User3", "user3Email@email.com");
         String jsonUser3 = objectMapper.writeValueAsString(user3);
 
         mockMvc.perform(post("/users")
@@ -91,7 +101,7 @@ class UserControllerTest {
     @Test
     void getAUsers_withNameParameterShouldReturnFilteredUsers() throws Exception {
 
-        User user4 = new User(null, "User4", "user4Email@email.com");
+        User user4 = new User("User4", "user4Email@email.com");
         String jsonUser4 = objectMapper.writeValueAsString(user4);
 
         mockMvc.perform(post("/users")
