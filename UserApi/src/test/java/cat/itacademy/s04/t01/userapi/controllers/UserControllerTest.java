@@ -1,6 +1,7 @@
 package cat.itacademy.s04.t01.userapi.controllers;
 
 import cat.itacademy.s04.t01.userapi.model.User;
+import cat.itacademy.s04.t01.userapi.repositories.UserRepository;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,17 +30,14 @@ class UserControllerTest {
     private ObjectMapper objectMapper;
 
     @Autowired
-    private UserController userController;
+    private UserRepository userRepository;
 
-    void clearUserList() {
-
+   @BeforeEach
+    void clearUsers() {
+        userRepository
+                .findAll()
+                .forEach(user -> userRepository.deleteById(user.getId()));
     }
-
-
-   /* @BeforeEach
-    void clearUserList() {
-        userController.clearUserList();
-    }*/
 
     @Test
     void getAUsers_shouldReturnEmptyListInitially() throws Exception {
@@ -59,7 +57,9 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonUser1))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(Matchers.notNullValue()));
+                .andExpect(jsonPath("$.id").value(Matchers.notNullValue()))
+                .andExpect(jsonPath("$.name").value("User1"))
+                .andExpect(jsonPath("$.email").value("user1Email@email.com"));
     }
 
     @Test
@@ -77,7 +77,6 @@ class UserControllerTest {
                 .getContentAsString();
 
         User createdUser = objectMapper.readValue(createdUserResponse, User.class);
-
 
         mockMvc.perform(get("/users/{id}", createdUser.getId()))
                 .andExpect(status().isOk())
