@@ -9,9 +9,9 @@ public interface UserService {
 
     User createUser(User user);
 
-    User updateUser(User user);
+    List<User> getAllUsers(String UserName);
 
-    User deleteUser(User user);
+    void deleteUser(User user);
 
     User findById(UUID id);
 

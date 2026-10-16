@@ -2,6 +2,7 @@ package cat.itacademy.s04.t01.userapi.controllers;
 
 import cat.itacademy.s04.t01.userapi.exceptions.ResourceNotFoundException;
 import cat.itacademy.s04.t01.userapi.model.User;
+import cat.itacademy.s04.t01.userapi.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -12,47 +13,27 @@ import java.util.UUID;
 @RestController
 public class UserController {
 
-    private final List<User>userList = new ArrayList<>();
+    private final UserService userService;
 
-    protected void clearUserList() {
-        this.userList.clear();
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping("/users")
-    public List<User> getAUsers(@RequestParam(required = false) String name) {
-
-        if(name == null || name.trim().isBlank()) {
-            return List.copyOf(this.userList);
-        }
-        return this.userList
-                .stream()
-                .filter(user-> user.getName().equalsIgnoreCase(name))
-                .findFirst()
-                .stream()
-                .toList();
+    public List<User> getUsers(@RequestParam(required = false) String name) {
+        return userService.getAllUsers(name);
     }
 
     @PostMapping("/users")
-    public User addUser(@RequestBody User user) {
+    public User createUser(@RequestBody User user) {
 
-        User newUser = new User(
-                user.getName(),
-                user.getEmail()
-        );
-        this.userList.add(newUser);
-        return newUser;
+        return userService.createUser(user);
     }
 
     @GetMapping("/users/{id}")
     @ResponseBody
     public User getUserById(@PathVariable UUID id) {
-        Optional<User>foundUser = this.userList
-                .stream()
-                .filter(user-> user.getId().equals(id))
-                .findFirst();
-        if(foundUser.isEmpty()) {
-            throw new ResourceNotFoundException("NotFound(404)");
-        }
-        return foundUser.get();
+
+        return userService.findById(id);
     }
 }

@@ -25,52 +25,46 @@ public class UserServiceImpl implements UserService {
 
         checkCreateInputData(user);
 
+        user.setId(UUID.randomUUID());
         userRepository.save(user);
 
         return user;
     }
 
-    private void checkCreateInputData(User user) {
+    @Override
+    public List<User> getAllUsers(String userName) {
+
+        if(userName == null || userName.trim().isBlank()) {
+            return userRepository.findAll();
+        }
+        return userRepository.searchByName(userName);
+    }
+
+
+    @Override
+    public void deleteUser(User user) {
+
         if(user == null) {
             throw new IllegalArgumentException("User must not be NULL");
         }
 
-        if(this.userRepository.existsByEmail(user.getEmail())) {
-            throw new ExistingUserException(String.format("User with email %s already exists", user.getEmail()));
+        Optional<User> foundUser = this.userRepository.findById(user.getId());
+
+        if(foundUser.isEmpty()) {
+            throw new UserNotFoundException(String.format("User with ID %s not found", user.getId().toString()));
         }
 
-        if(this.userRepository.findById(user.getId()).isPresent()) {
-            throw new ExistingUserException(String.format("User with ID %s already exists", user.getId().toString()));
-        }
-    }
-
-    @Override
-    public User updateUser(User user) {
-        checkUpdateInputData(user);
-        return null;
-    }
-
-    private void checkUpdateInputData(User user) {
-        if(user == null) {
-            throw new IllegalArgumentException("User must not be NULL");
-        }
-        if(!this.userRepository.existsByEmail(user.getEmail())) {
-            throw new ExistingUserException(String.format("User with email %s not found", user.getEmail()));
-        }
-    }
-
-    @Override
-    public User deleteUser(User user) {
-        return null;
+        this.userRepository.deleteById(user.getId());
     }
 
     @Override
     public User findById(UUID id) {
-        Optional<User> foundUser = this.userRepository
-                .findAll()
-                .stream()
-                .filter(user-> id.equals(user.getId()))
-                .findFirst();
+
+        if(id == null) {
+            throw new IllegalArgumentException("ID must not be NULL");
+        }
+
+        Optional<User> foundUser = this.userRepository.findById(id);
 
         if(foundUser.isEmpty()) {
             throw new UserNotFoundException(String.format("User with ID %s not found", id.toString()));
@@ -85,10 +79,16 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("Name must not be NULL");
         }
 
-        return this.userRepository
-                .findAll()
-                .stream()
-                .filter(user -> name.equalsIgnoreCase(user.getName()))
-                .collect(Collectors.toList());
+        return this.userRepository.searchByName(name);
+    }
+
+    private void checkCreateInputData(User user) {
+        if(user == null) {
+            throw new IllegalArgumentException("User must not be NULL");
+        }
+
+        if(this.userRepository.existsByEmail(user.getEmail())) {
+            throw new ExistingUserException(String.format("User with email %s already exists", user.getEmail()));
+        }
     }
 }

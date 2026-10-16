@@ -31,11 +31,15 @@ class UserControllerTest {
     @Autowired
     private UserController userController;
 
+    void clearUserList() {
 
-    @BeforeEach
+    }
+
+
+   /* @BeforeEach
     void clearUserList() {
         userController.clearUserList();
-    }
+    }*/
 
     @Test
     void getAUsers_shouldReturnEmptyListInitially() throws Exception {
