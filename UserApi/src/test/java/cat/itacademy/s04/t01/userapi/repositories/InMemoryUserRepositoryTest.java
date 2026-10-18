@@ -3,7 +3,6 @@ package cat.itacademy.s04.t01.userapi.repositories;
 import cat.itacademy.s04.t01.userapi.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 
@@ -33,7 +32,7 @@ class InMemoryUserRepositoryTest {
 
     @Test
     void findAllShouldReturnEmptyAtStart() {
-        assert(repository.findAll().isEmpty());
+        assertTrue(repository.findAll().isEmpty());
     }
 
     @Test
