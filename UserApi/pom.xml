@@ -12,7 +12,7 @@
     <artifactId>userapi</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>UserApi</name>
-    <description>UserApi</description>
+    <description>My first user manager REST API</description>
     <url/>
     <licenses>
         <license/>
