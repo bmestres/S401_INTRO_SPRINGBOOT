@@ -76,7 +76,11 @@ class InMemoryUserRepositoryTest {
     void deleteByIdShouldRemoveUserWithSameId() {
 
         User testUser1 = new User("Name 1", "user1@email.com");
+        testUser1.setId(UUID.randomUUID());
         repository.save(testUser1);
+
+        repository.deleteById(testUser1.getId());
+        assertTrue(repository.findById(testUser1.getId()).isEmpty());
 
     }
 }
