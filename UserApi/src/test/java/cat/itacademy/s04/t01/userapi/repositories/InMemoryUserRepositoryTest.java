@@ -57,6 +57,7 @@ class InMemoryUserRepositoryTest {
 
         assertEquals(1, repository.searchByName("Name 1").size());
         assertEquals("Name 1", repository.searchByName("Name 1").getFirst().getName());
+        assertEquals("Name 2", repository.searchByName("Name 2").getFirst().getName());
     }
 
     @Test
