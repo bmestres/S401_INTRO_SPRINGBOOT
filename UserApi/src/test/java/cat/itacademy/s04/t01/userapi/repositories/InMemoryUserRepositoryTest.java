@@ -26,8 +26,8 @@ class InMemoryUserRepositoryTest {
         User testUser = new User("Test User 1", "example1@email.com");
         repository.save(testUser);
 
-        assert(repository.findAll().size() == initialListSize + 1);
-        assert(repository.findAll().getFirst().equals(testUser));
+        assertEquals(initialListSize + 1, repository.findAll().size());
+        assertEquals(testUser, repository.findAll().getFirst());
 
     }
 
