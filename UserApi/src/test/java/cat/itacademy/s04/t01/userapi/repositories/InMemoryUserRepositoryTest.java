@@ -77,6 +77,6 @@ class InMemoryUserRepositoryTest {
 
         User testUser1 = new User("Name 1", "user1@email.com");
         repository.save(testUser1);
-        
+
     }
 }
