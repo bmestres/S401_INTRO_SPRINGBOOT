@@ -81,6 +81,5 @@ class InMemoryUserRepositoryTest {
 
         repository.deleteById(testUser1.getId());
         assertTrue(repository.findById(testUser1.getId()).isEmpty());
-
     }
 }
