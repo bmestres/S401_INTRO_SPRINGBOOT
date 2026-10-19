@@ -26,42 +26,55 @@ java -jar target/userapi-0.0.1-SNAPSHOT.jar
 **Project structure:**
 ````
 .
-├── Captura de pantalla 2026-10-12 a las 17.34.54.png
-├── HELP.md
-├── mvnw
-├── mvnw.cmd
-├── pom.xml
-└── src
-    ├── main
-    │   ├── java
-    │   │   └── cat
-    │   │       └── itacademy
-    │   │           └── s04
-    │   │               └── t01
-    │   │                   └── userapi
-    │   │                       ├── controllers
-    │   │                       │   ├── HealthController.java
-    │   │                       │   └── UserController.java
-    │   │                       ├── exceptions
-    │   │                       │   └── ResourceNotFoundException.java
-    │   │                       ├── model
-    │   │                       │   └── User.java
-    │   │                       ├── status
-    │   │                       │   └── HealthStatus.java
-    │   │                       └── UserApiApplication.java
-    │   └── resources
-    │       ├── application.yaml
-    │       ├── static
-    │       └── templates
-    └── test
-        └── java
-            └── cat
-                └── itacademy
-                    └── s04
-                        └── t01
-                            └── userapi
-                                ├── controllers
-                                │   ├── HealthControllerTest.java
-                                │   └── UserControllerTest.java
-                                └── UserApiApplicationTests.java
+├── README.md
+└── UserApi
+    ├── Captura de pantalla 2026-10-12 a las 17.34.54.png
+    ├── HELP.md
+    ├── mvnw
+    ├── mvnw.cmd
+    ├── pom.xml
+    └── src
+        ├── main
+        │   ├── java
+        │   │   └── cat
+        │   │       └── itacademy
+        │   │           └── s04
+        │   │               └── t01
+        │   │                   └── userapi
+        │   │                       ├── controllers
+        │   │                       │   ├── HealthController.java
+        │   │                       │   └── UserController.java
+        │   │                       ├── exceptions
+        │   │                       │   ├── ExistingUserException.java
+        │   │                       │   ├── ResourceNotFoundException.java
+        │   │                       │   └── UserNotFoundException.java
+        │   │                       ├── model
+        │   │                       │   └── User.java
+        │   │                       ├── repositories
+        │   │                       │   ├── InMemoryUserRepository.java
+        │   │                       │   └── UserRepository.java
+        │   │                       ├── service
+        │   │                       │   ├── UserService.java
+        │   │                       │   └── UserServiceImpl.java
+        │   │                       ├── status
+        │   │                       │   └── HealthStatus.java
+        │   │                       └── UserApiApplication.java
+        │   └── resources
+        │       ├── application.yaml
+        │       ├── static
+        │       └── templates
+        └── test
+            └── java
+                └── cat
+                    └── itacademy
+                        └── s04
+                            └── t01
+                                └── userapi
+                                    ├── controllers
+                                    │   ├── HealthControllerTest.java
+                                    │   └── UserControllerTest.java
+                                    ├── repositories
+                                    │   └── InMemoryUserRepositoryTest.java
+                                    └── service
+                                        └── UserServiceImplTest.java
 ```
